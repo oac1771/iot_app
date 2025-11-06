@@ -26,9 +26,17 @@ fn Title() -> Element {
 
 #[component]
 fn Scanner() -> Element {
+    let mut count = use_signal(|| 0);
+    let current = count.read().clone();
+
     rsx! {
-        div { id: "scanner-container",
-            button { id: "buttons", "scan" }
+        div { 
+            id: "scanner-container",
+            button { 
+                onclick: move |_| count += 1,
+                id: "buttons", 
+                "Increment ({current})"
+            }
         }
     }
 }
