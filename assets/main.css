@@ -4,3 +4,20 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 20px;
 }
+
+#title {
+    text-align: center;
+}
+
+#scanner-container {
+    text-align: center;
+}
+
+#buttons {
+    background-color: #0ea490;
+    color: #ffffff;
+    font-size: 2rem;       /* bigger text */
+    width: 200px;          /* optional fixed width */
+    height: 80px;          /* optional fixed height */
+    border-radius: 12px;   /* rounded corners */
+}

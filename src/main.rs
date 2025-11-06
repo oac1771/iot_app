@@ -11,7 +11,7 @@ fn App() -> Element {
     rsx! {
         document::Stylesheet { href: MAIN_CSS }
         Title {}
-        DogView {}
+        Scanner {}
     }
 }
 
@@ -25,16 +25,10 @@ fn Title() -> Element {
 }
 
 #[component]
-fn DogView() -> Element {
+fn Scanner() -> Element {
     rsx! {
-        div { id: "buttons",
-            button { id: "scan", "scan" }
+        div { id: "scanner-container",
+            button { id: "buttons", "scan" }
         }
-
-        { (0..10).map(|idx| rsx! {
-            div {
-                h1 {"item {idx}"}
-            }
-        })}
     }
 }
