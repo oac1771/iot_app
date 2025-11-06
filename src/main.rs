@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use rand::Rng;
 
 const MAIN_CSS: Asset = asset!("assets/main.css");
 
@@ -18,7 +19,7 @@ fn App() -> Element {
 #[component]
 fn Title() -> Element {
     rsx! {
-        div { 
+        div {
             id: "title",
             h1 { "Iot" }
         }
@@ -27,66 +28,41 @@ fn Title() -> Element {
 
 #[component]
 fn Scanner() -> Element {
-    let scan_results = use_resource(|| scan());
+    let mut trigger = use_signal(|| 0);
 
-    let scan_results = match scan_results() {
-        Some(Ok(src)) => src,
-        _ => {
-            return rsx! {
-                p { "Loading or error..." }
-            };
-        }
+    let scan_results = use_resource(move || {
+        let _ = trigger(); // dependency — will rerun when trigger changes
+        async move { scan().await }
+    });
+
+    let scan = match scan_results() {
+        Some(Ok(results)) => rsx! {
+            div {
+                h1 { "Scan results" }
+                for item in results.iter() {
+                    div { "Item {item}" }
+                }
+            }
+        },
+        Some(Err(err)) => rsx! { p { "Error Scanning: {err}" } },
+        None => rsx! { p { "Loading..." } },
     };
 
     rsx! {
         div {
-            h1 { "Scan results" }
-        }
-        for idx in scan_results {
-            div {
-                "Item {idx}"
+            button {
+                onclick: move |_| trigger.set(trigger() + 1),
+                "Scan!"
             }
+            {scan}
         }
     }
-
-    // #[derive(serde::Deserialize)]
-    // struct DogApi {
-    //     message: String,
-    // }
-
-    // let mut img_src = use_signal(|| "image.png".to_string());
-
-    // let fetch_new = move |_| async move {
-    //     let response = reqwest::get("https://dog.ceo/api/breeds/image/random")
-    //         .await
-    //         .unwrap()
-    //         .json::<DogApi>()
-    //         .await
-    //         .unwrap();
-
-    //     img_src.set(response.message);
-    // };
-
-    // rsx! {
-    //     img { src: img_src }
-    //     button { onclick: fetch_new, "Fetch a new dog!" }
-    // }
-
-    // let mut count = use_signal(|| 0);
-    // let current = count.read().clone();
-
-    // rsx! {
-    //     div {
-    //         id: "scanner-container",
-    //         button {
-    //             onclick: move |_| count += 1,
-    //             id: "buttons",
-    //             "Increment ({current})"
-    //         }
-    //     }
-    // }
 }
 
-fn scan() -> impl Future<Output = dioxus::Result<Vec<String>, String>> {
-    async move { Ok(vec!["foo".into(), "bar".into()]) }
+fn scan() -> impl Future<Output = dioxus::Result<Vec<i32>, String>> {
+    async move {
+        let mut rng = rand::thread_rng();
+        let random_length = rng.gen_range(5..=15);
+        Ok((0..random_length).map(|_| rng.gen_range(0..100)).collect())
+    }
 }
