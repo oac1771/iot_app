@@ -9,15 +9,20 @@ body {
     text-align: center;
 }
 
-#scanner-container {
+#button-container {
     text-align: center;
 }
 
-#buttons {
+#button {
     background-color: #0ea490;
     color: #ffffff;
-    font-size: 2rem;       /* bigger text */
-    width: 200px;          /* optional fixed width */
-    height: 80px;          /* optional fixed height */
-    border-radius: 12px;   /* rounded corners */
+    font-size: 2rem;       
+    width: 150px;         
+    height: 80px;        
+    border-radius: 12px;  
+}
+
+#scan_results {
+    color: #ffffff;
+    text-align: center;
 }
