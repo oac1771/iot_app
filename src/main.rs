@@ -31,8 +31,13 @@ fn Scanner() -> Element {
     let mut trigger = use_signal(|| 0);
 
     let scan_results = use_resource(move || {
-        let _ = trigger(); // dependency — will rerun when trigger changes
-        async move { scan().await }
+        let count = trigger();
+        async move {
+            if count == 0 {
+                return Ok(Vec::new());
+            }
+            scan().await
+        }
     });
 
     let scan = match scan_results() {
@@ -54,8 +59,12 @@ fn Scanner() -> Element {
                 onclick: move |_| trigger.set(trigger() + 1),
                 "Scan!"
             }
-            {scan}
+            button {
+                onclick: move |_| trigger.set(0),
+                "Clear"
+            }
         }
+        {scan}
     }
 }
 
