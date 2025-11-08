@@ -1,2 +1,1 @@
-- Fix formatting 
-    - center things
+- figure out how to integrate dioxus and swift: You write Swift code that uses CoreBluetooth and expose simple functions callable from Rust.

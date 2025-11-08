@@ -1,5 +1,4 @@
 use dioxus::prelude::*;
-use rand::Rng;
 
 #[component]
 pub fn Scanner() -> Element {
@@ -40,7 +39,7 @@ pub fn Scanner() -> Element {
             button {
                 id: "button",
                 onclick: move |_| trigger.set(trigger() + 1),
-                "Scan!"
+                "Scan"
             }
             button {
                 id: "button",
@@ -54,8 +53,6 @@ pub fn Scanner() -> Element {
 
 fn scan() -> impl Future<Output = dioxus::Result<Vec<i32>, String>> {
     async move {
-        let mut rng = rand::thread_rng();
-        let random_length = rng.gen_range(5..=15);
-        Ok((0..random_length).map(|_| rng.gen_range(0..100)).collect())
+        Ok(vec![1,2,3,4,5])
     }
 }
